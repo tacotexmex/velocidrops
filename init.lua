@@ -49,9 +49,9 @@ function minetest.item_drop(itemstack, dropper, pos, sound)
 			charge[name] = 0
 		end
 		if obj then
-			dir.x = (dir.x * 5 + (charge[name] * 5)) + vel.x
-			dir.y = ((dir.y * 5 + (charge[name] * 5)) + 2) + vel.y
-			dir.z = (dir.z * 5 + (charge[name] * 5)) + vel.z
+			dir.x = (dir.x * (5 + (charge[name] * 10))) + vel.x
+			dir.y = (dir.y * (5 + (charge[name] * 10))) + 2 + vel.y
+			dir.z = (dir.z * (5 + (charge[name] * 10))) + vel.z
 			obj:setvelocity(dir)
 			obj:get_luaentity().dropped_by = dropper:get_player_name()
 			itemstack:clear()

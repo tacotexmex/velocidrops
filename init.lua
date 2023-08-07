@@ -13,6 +13,11 @@ minetest.register_on_joinplayer(function(player)
 	charge[name] = 0
 end)
 
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name()
+	charge[name] = nil
+end)
+
 controls.register_on_hold(function(player, control_name, time)
 	if control_name == "sneak" then
 		local name = player:get_player_name()
@@ -36,7 +41,7 @@ function minetest.item_drop(itemstack, dropper, pos, sound)
 	if dropper and minetest.get_player_information(dropper:get_player_name()) then
 		local name = dropper:get_player_name()
 		local dir = dropper:get_look_dir()
-		local vel = dropper:get_player_velocity()
+		local vel = dropper:get_velocity()
 		local pos = {
 			x = pos.x,
 			y = pos.y + player_collect_height,
@@ -49,10 +54,10 @@ function minetest.item_drop(itemstack, dropper, pos, sound)
 			charge[name] = 0
 		end
 		if obj then
-			dir.x = (dir.x * (5 + (charge[name] * 10))) + vel.x
-			dir.y = (dir.y * (5 + (charge[name] * 10))) + 2 + vel.y
-			dir.z = (dir.z * (5 + (charge[name] * 10))) + vel.z
-			obj:setvelocity(dir)
+			vel.x = (dir.x * (5 + (charge[name] * 10))) + vel.x
+			vel.y = (dir.y * (5 + (charge[name] * 10))) + 2 + vel.y
+			vel.z = (dir.z * (5 + (charge[name] * 10))) + vel.z
+			obj:add_velocity(vel)
 			obj:get_luaentity().dropped_by = dropper:get_player_name()
 			itemstack:clear()
 			charge[name] = 0
